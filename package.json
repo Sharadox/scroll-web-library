@@ -1,6 +1,6 @@
 {
   "name": "@sharadox/scroll-web-library",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Scrolling for React websites: smooth inertial scrolling with anchor jumps (Lenis) and the active section with page progress.",
   "private": false,
   "license": "SEE LICENSE IN LICENCA.md",
@@ -31,7 +31,7 @@
     "**/*.css"
   ],
   "engines": {
-    "node": ">=24"
+    "node": ">=26"
   },
   "packageManager": "pnpm@10.34.9",
   "publishConfig": {
