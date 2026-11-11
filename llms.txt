@@ -1,0 +1,7 @@
+# @sharadox/scroll-web-library
+
+> Smooth scrolling (Lenis) and active-section tracking for React.
+
+- /smooth-scroll: <SmoothScroll duration=1.15 anchorOffset=-60 /> — off with prefers-reduced-motion; handles a[href^="#"] clicks
+- /active-section: useActiveSection(ids: readonly string[]) → { active: id at viewport middle, within: 0–1 through it, page: 0–1 page progress }
+- Peer: react. Licence: Sharadox Open Source Licence 0.1.0
