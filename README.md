@@ -2,7 +2,7 @@
 
 Scrolling for React websites:
 
-- **Smooth scrolling:** inertial scrolling with Lenis, including in-page anchor links that stop above a fixed header. It turns off for visitors who prefer reduced motion.
+- **Smooth scrolling:** inertial scrolling with Lenis, including in-page anchor links that stop above a fixed header. A link to the page already open (the logo on the home page) glides back to the top instead of reloading. Smoothing turns off for visitors who prefer reduced motion; same-page links still skip the reload.
 - **Active section:** which section holds the middle of the screen, how far through it you are, and how far down the page. That's what section indicators and progress bars need.
 
 ## Install

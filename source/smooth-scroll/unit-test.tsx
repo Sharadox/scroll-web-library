@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { cleanup, render } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
 const lenis = { raf: vi.fn(), scrollTo: vi.fn(), destroy: vi.fn() };
@@ -13,6 +13,7 @@ const prefersReducedMotion = (reduced: boolean) =>
 
 beforeEach(() => vi.useFakeTimers({ toFake: ["requestAnimationFrame", "cancelAnimationFrame"] }));
 afterEach(() => {
+  cleanup();
   vi.useRealTimers();
   vi.restoreAllMocks();
   vi.clearAllMocks();
@@ -45,9 +46,47 @@ describe("SmoothScroll", () => {
     expect(lenis.scrollTo).toHaveBeenCalledOnce();
   });
 
-  test("stays off when the visitor prefers reduced motion", () => {
-    prefersReducedMotion(true);
+  test("a link to the page already open glides to the top instead of reloading", () => {
+    prefersReducedMotion(false);
+    history.replaceState(null, "", "/en");
+    document.body.innerHTML = [
+      '<a id="home" href="/en/">Home</a>',
+      '<a id="other" href="/pt">PT</a>',
+      '<a id="tab" href="/en" target="_blank">New tab</a>',
+      '<a id="query" href="/en?x=1">Query</a>',
+      '<a id="hash" href="/en#top">Hash</a>',
+    ].join("");
     render(<SmoothScroll />);
+    const click = (id: string, init: MouseEventInit = {}) =>
+      document.getElementById(id)!.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true, ...init }));
+    expect(click("home")).toBe(false);
+    expect(lenis.scrollTo).toHaveBeenLastCalledWith(0);
+    expect(click("home", { metaKey: true })).toBe(true);
+    expect(click("home", { ctrlKey: true })).toBe(true);
+    expect(click("home", { shiftKey: true })).toBe(true);
+    expect(click("home", { altKey: true })).toBe(true);
+    expect(click("home", { button: 1 })).toBe(true);
+    expect(click("other")).toBe(true);
+    expect(click("tab")).toBe(true);
+    expect(click("query")).toBe(true);
+    expect(click("hash")).toBe(true);
+    expect(lenis.scrollTo).toHaveBeenCalledOnce();
+  });
+
+  test("stays off when the visitor prefers reduced motion, but still keeps same-page links from reloading", () => {
+    prefersReducedMotion(true);
+    history.replaceState(null, "", "/");
+    const scrollTo = vi.spyOn(window, "scrollTo").mockImplementation(() => {});
+    document.body.innerHTML =
+      '<a id="home" href="/">Home</a><a href="#contact">Contact</a><section id="contact"></section>';
+    const { unmount } = render(<SmoothScroll />);
     expect(Lenis).not.toHaveBeenCalled();
+    const home = document.getElementById("home")!;
+    expect(home.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }))).toBe(false);
+    expect(scrollTo).toHaveBeenCalledWith({ top: 0, behavior: "auto" });
+    // Anchors are left to the browser.
+    const anchor = document.querySelector('a[href="#contact"]')!;
+    expect(anchor.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }))).toBe(true);
+    unmount();
   });
 });

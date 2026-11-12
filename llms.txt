@@ -5,3 +5,4 @@
 - /smooth-scroll: <SmoothScroll duration=1.15 anchorOffset=-60 /> — off with prefers-reduced-motion; handles a[href^="#"] clicks
 - /active-section: useActiveSection(ids: readonly string[]) → { active: id at viewport middle, within: 0–1 through it, page: 0–1 page progress }
 - Peer: react. License: Sharadox Open Source License 0.1.0
+- SmoothScroll also turns plain clicks on links to the current page (same path, no hash or query, no target, no modifier keys) into a scroll to the top, without reloading — with or without reduced motion.
