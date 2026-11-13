@@ -41,17 +41,19 @@ export function useScrollSteps<Element extends HTMLElement>(
         at: (index: number) => top + ((index + 0.5) / count) * travel,
       };
     };
-    // Moves one step in `direction` if there is one; true when the gesture was taken.
-    const step = (direction: 1 | -1, now: number) => {
+    /*
+     * Moves one step in `direction` if there is one. A touch's glide starts once the touch event is over: smooth
+     * scrolling handles the same lifted finger after us, and would otherwise stop the glide it doesn't know about.
+     */
+    const step = (direction: 1 | -1, now: number, afterEvent = false) => {
       const where = place();
-      if (!where) return false;
+      if (!where) return;
       const next = where.current + direction;
-      if (next < 0 || next >= count) return false;
-      if (now >= lockedUntil) {
-        lockedUntil = now + duration * 1000;
-        glideTo(where.at(next), { duration });
-      }
-      return true;
+      if (next < 0 || next >= count || now < lockedUntil) return;
+      lockedUntil = now + duration * 1000;
+      const glide = () => glideTo(where.at(next), { duration });
+      if (afterEvent) setTimeout(glide);
+      else glide();
     };
     const wheel = (event: WheelEvent) => {
       if (Math.abs(event.deltaY) < Math.abs(event.deltaX)) return;
@@ -81,7 +83,7 @@ export function useScrollSteps<Element extends HTMLElement>(
       if (touchY === null) return;
       const travel = touchY - event.changedTouches[0]!.clientY;
       touchY = null;
-      if (Math.abs(travel) >= SWIPE) step(travel > 0 ? 1 : -1, event.timeStamp);
+      if (Math.abs(travel) >= SWIPE) step(travel > 0 ? 1 : -1, event.timeStamp, true);
     };
     const options = { capture: true, passive: false };
     addEventListener("wheel", wheel, options);

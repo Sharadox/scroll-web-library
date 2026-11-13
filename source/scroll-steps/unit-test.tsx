@@ -84,13 +84,16 @@ test("past the first and last step, and outside the section, the page scrolls as
   expect(glider.scrollTo).not.toHaveBeenCalled();
 });
 
-test("a finger swipe moves one step; short touches and swipes past the ends don't", () => {
+test("a finger swipe moves one step, once the touch event is over; short touches and swipes past the ends don't", async () => {
   render(<Steps />);
   Object.defineProperty(document.querySelector("section")!, "offsetHeight", { value: 6900 });
   at(1000);
   touch("touchstart", 600);
   expect(touch("touchmove", 500).defaultPrevented).toBe(true);
   touch("touchend", 400, 100);
+  // Smooth scrolling still handles the same touch end: the glide waits until it has.
+  expect(glider.scrollTo).not.toHaveBeenCalled();
+  await new Promise((resolve) => setTimeout(resolve));
   expect(glider.scrollTo).toHaveBeenLastCalledWith(2500, { duration: 0.5 });
   touch("touchstart", 600);
   touch("touchend", 590, 2000);
@@ -107,6 +110,7 @@ test("a finger swipe moves one step; short touches and swipes past the ends don'
   touch("touchstart", 600);
   touch("touchmove", 500);
   touch("touchend", 300, 4000);
+  await new Promise((resolve) => setTimeout(resolve));
   expect(glider.scrollTo).toHaveBeenCalledTimes(1);
 });
 
