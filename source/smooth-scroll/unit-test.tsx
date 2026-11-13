@@ -7,6 +7,7 @@ const Lenis = vi.fn(function () {
 });
 vi.mock("lenis", () => ({ default: Lenis }));
 const { SmoothScroll } = await import("@sharadox/scroll-web-library/smooth-scroll");
+const { glideTo } = await import("@sharadox/scroll-web-library/glide");
 
 const prefersReducedMotion = (reduced: boolean) =>
   vi.spyOn(window, "matchMedia").mockReturnValue({ matches: reduced } as MediaQueryList);
@@ -28,8 +29,14 @@ describe("SmoothScroll", () => {
     expect(Lenis).toHaveBeenCalledWith({ duration: 1, smoothWheel: true });
     vi.advanceTimersByTime(50);
     expect(lenis.raf).toHaveBeenCalled();
+    // Programmatic glides go through it too, and stop going through it once it is gone.
+    glideTo(900, { duration: 0.7 });
+    expect(lenis.scrollTo).toHaveBeenLastCalledWith(900, { duration: 0.7 });
     unmount();
     expect(lenis.destroy).toHaveBeenCalled();
+    const scroll = vi.spyOn(window, "scrollTo").mockImplementation(() => {});
+    glideTo(900);
+    expect(scroll).toHaveBeenCalled();
   });
 
   test("jumps to in-page anchors above a fixed header, and ignores other clicks", () => {
