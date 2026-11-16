@@ -53,6 +53,15 @@ describe("SmoothScroll", () => {
     expect(lenis.scrollTo).toHaveBeenCalledOnce();
   });
 
+  test("#top glides to the top of the page that is open", () => {
+    prefersReducedMotion(false);
+    document.body.innerHTML = '<a href="#top">Back to top</a>';
+    render(<SmoothScroll />);
+    const link = document.querySelector("a")!;
+    expect(link.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }))).toBe(false);
+    expect(lenis.scrollTo).toHaveBeenLastCalledWith(0);
+  });
+
   test("a link to the page already open glides to the top instead of reloading", () => {
     prefersReducedMotion(false);
     history.replaceState(null, "", "/en");
@@ -91,9 +100,22 @@ describe("SmoothScroll", () => {
     const home = document.getElementById("home")!;
     expect(home.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }))).toBe(false);
     expect(scrollTo).toHaveBeenCalledWith({ top: 0, behavior: "auto" });
-    // Anchors are left to the browser.
+    // Anchors are left to the browser...
     const anchor = document.querySelector('a[href="#contact"]')!;
     expect(anchor.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }))).toBe(true);
+    // ...unless a SectionLink already took the click: then they jump here, and #top goes to the top.
+    const section = document.getElementById("contact")!;
+    section.scrollIntoView = vi.fn();
+    const taken = (link: Element) => {
+      const click = new MouseEvent("click", { bubbles: true, cancelable: true });
+      link.addEventListener("click", (event) => event.preventDefault(), { once: true });
+      link.dispatchEvent(click);
+    };
+    taken(anchor);
+    expect(section.scrollIntoView).toHaveBeenCalled();
+    document.body.insertAdjacentHTML("beforeend", '<a id="top-link" href="#top">Top</a>');
+    taken(document.getElementById("top-link")!);
+    expect(scrollTo).toHaveBeenLastCalledWith({ top: 0, behavior: "auto" });
     unmount();
   });
 });
