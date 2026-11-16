@@ -15,12 +15,13 @@ pnpm add @sharadox/scroll-web-library
 
 ## API
 
-| Import             | Export                                                                                                  |
-| ------------------ | ------------------------------------------------------------------------------------------------------- |
-| `…/smooth-scroll`  | `<SmoothScroll duration? anchorOffset?>` (renders nothing; default 1.15 s and -60 px)                   |
-| `…/active-section` | `useActiveSection(ids)` → `{ active, within, page }` (keep `ids` stable, for example a module constant) |
-| `…/glide`          | `glideTo(top, { duration? })`                                                                           |
-| `…/scroll-steps`   | `useScrollSteps(sectionRef, count, { duration? })` (0.9 s by default)                                   |
+| Import             | Export                                                                                                                          |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
+| `…/smooth-scroll`  | `<SmoothScroll duration? anchorOffset?>` (renders nothing; default 1.15 s and -60 px; `#top` glides to the top of any page)     |
+| `…/section-link`   | `<SectionLink href>`: Next.js `Link` for a section (`#id`, `/en#id`) that leaves scrolling to `SmoothScroll` (`scroll={false}`) |
+| `…/active-section` | `useActiveSection(ids)` → `{ active, within, page }` (keep `ids` stable, for example a module constant)                         |
+| `…/glide`          | `glideTo(top, { duration? })`                                                                                                   |
+| `…/scroll-steps`   | `useScrollSteps(sectionRef, count, { duration? })` (0.9 s by default)                                                           |
 
 ## Develop
 

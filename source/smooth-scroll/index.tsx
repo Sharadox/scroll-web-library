@@ -8,9 +8,10 @@ import type { SmoothScrollProperties } from "@sharadox/scroll-web-library/smooth
 const page = (path: string) => path.replace(/(.)\/$/, "$1");
 
 /**
- * Smooth, inertial page scrolling, including in-page anchor links. A link to the page already open (the logo on the
- * home page, for one) glides back to the top instead of reloading. Smoothing is off when the visitor prefers reduced
- * motion: anchors then jump, and the same-page link still goes to the top without reloading.
+ * Smooth, inertial page scrolling, including in-page anchor links (plain ones and `SectionLink`s) and `#top`, which
+ * glides to the top of whatever page is open. A link to the page already open (the logo on the home page, for one)
+ * glides back to the top instead of reloading. Smoothing is off when the visitor prefers reduced motion: anchors then
+ * jump, and the same-page link still goes to the top without reloading.
  */
 export function SmoothScroll({ duration = 1.15, anchorOffset = -60 }: SmoothScrollProperties) {
   useEffect(() => {
@@ -28,13 +29,19 @@ export function SmoothScroll({ duration = 1.15, anchorOffset = -60 }: SmoothScro
     const onClick = (event: MouseEvent) => {
       const link = (event.target as HTMLElement).closest<HTMLAnchorElement>("a[href]");
       if (!link) return;
-      const anchor = link.getAttribute("href")!.startsWith("#")
-        ? document.querySelector<HTMLElement>(link.getAttribute("href")!)
-        : null;
-      if (anchor) {
-        if (!lenis) return;
+      const href = link.getAttribute("href")!;
+      if (href.startsWith("#")) {
+        // "#top" is the top of any page, as in browsers; other anchors are the element with that id.
+        const anchor = href === "#top" ? document.documentElement : document.querySelector<HTMLElement>(href);
+        if (!anchor) return;
+        // A `SectionLink` (Next.js Link that leaves scrolling to us) has already taken the click: scroll even then.
+        if (!lenis && !event.defaultPrevented) return;
         event.preventDefault();
-        lenis.scrollTo(anchor, { offset: anchorOffset });
+        if (anchor === document.documentElement) {
+          if (lenis) lenis.scrollTo(0);
+          else window.scrollTo({ top: 0, behavior: "auto" });
+        } else if (lenis) lenis.scrollTo(anchor, { offset: anchorOffset });
+        else anchor.scrollIntoView();
         return;
       }
       // A plain click on a link to this very page: back to the top, no reload.

@@ -10,3 +10,5 @@
 - /scroll-steps: useScrollSteps(sectionRef, count, { duration? = 0.9 }) — while the section is pinned, each wheel gesture (a pause of 180 ms starts a new one) or finger swipe (30 px+) glides exactly one step; step i sits at top + (i + 0.5) / count × (height − innerHeight); past the ends the page scrolls on
 - 0.3.0: glide, scroll-steps
 - 0.3.1: a finger swipe's step glide starts after the touch event, so smooth scrolling (Lenis) no longer stops it on phones
+- /section-link: <SectionLink href …LinkProps> — next/link with scroll={false} for in-page sections; SmoothScroll glides (or, with reduced motion, jumps) to the anchor even though Link took the click
+- 0.4.0: SectionLink; SmoothScroll handles "#top" (top of the open page) and anchors whose click a Next.js Link already took; next is a peer dependency
