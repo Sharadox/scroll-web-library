@@ -15,13 +15,13 @@ pnpm add @sharadox/scroll-web-library
 
 ## API
 
-| Import             | Export                                                                                                                                                                            |
-| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `…/smooth-scroll`  | `<SmoothScroll duration? anchorOffset?>` (renders nothing; default 1.15 s and -60 px; `#top` glides to the top of any page)                                                       |
-| `…/section-link`   | `<SectionLink href>`: Next.js `Link` for a section: on this page (`#id`) scrolling is left to `SmoothScroll` (`scroll={false}`); on another page (`/en#id`) Next.js scrolls there |
-| `…/active-section` | `useActiveSection(ids)` → `{ active, within, page }` (keep `ids` stable, for example a module constant)                                                                           |
-| `…/glide`          | `glideTo(top, { duration? })`                                                                                                                                                     |
-| `…/scroll-steps`   | `useScrollSteps(sectionRef, count, { duration? })` (0.9 s by default)                                                                                                             |
+| Import             | Export                                                                                                                                                                                                       |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `…/smooth-scroll`  | `<SmoothScroll duration? anchorOffset?>` (renders nothing; default 1.15 s and -60 px; `#top` glides to the top of any page; in a page or a layout, and a glide from one page never carries over to the next) |
+| `…/section-link`   | `<SectionLink href>`: Next.js `Link` for a section: on this page (`#id`) scrolling is left to `SmoothScroll` (`scroll={false}`); on another page (`/en#id`) Next.js scrolls there                            |
+| `…/active-section` | `useActiveSection(ids)` → `{ active, within, page }` (keep `ids` stable, for example a module constant)                                                                                                      |
+| `…/glide`          | `glideTo(top, { duration? })`                                                                                                                                                                                |
+| `…/scroll-steps`   | `useScrollSteps(sectionRef, count, { duration? })` (0.9 s by default)                                                                                                                                        |
 
 ## Develop
 

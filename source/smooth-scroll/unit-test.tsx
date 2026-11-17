@@ -6,13 +6,15 @@ const Lenis = vi.fn(function () {
   return lenis;
 });
 vi.mock("lenis", () => ({ default: Lenis }));
+let pathname = "/en";
+vi.mock("next/navigation", () => ({ usePathname: () => pathname }));
 const { SmoothScroll } = await import("@sharadox/scroll-web-library/smooth-scroll");
 const { glideTo } = await import("@sharadox/scroll-web-library/glide");
 
 const prefersReducedMotion = (reduced: boolean) =>
   vi.spyOn(window, "matchMedia").mockReturnValue({ matches: reduced } as MediaQueryList);
 
-beforeEach(() => vi.useFakeTimers({ toFake: ["requestAnimationFrame", "cancelAnimationFrame"] }));
+beforeEach(() => vi.useFakeTimers({ toFake: ["requestAnimationFrame", "cancelAnimationFrame", "performance"] }));
 afterEach(() => {
   cleanup();
   vi.useRealTimers();
@@ -22,11 +24,66 @@ afterEach(() => {
 });
 
 describe("SmoothScroll", () => {
+  test("a new page stops the previous page's smoothing at once, and keeps its own when the old one leaves", () => {
+    prefersReducedMotion(false);
+    const previous = render(<SmoothScroll />);
+    render(<SmoothScroll />);
+    expect(lenis.destroy).toHaveBeenCalledOnce();
+    previous.unmount();
+    expect(lenis.destroy).toHaveBeenCalledOnce();
+    // The new page's glides still go through its smoothing.
+    glideTo(500);
+    expect(lenis.scrollTo).toHaveBeenLastCalledWith(500, {});
+  });
+
+  test("stops smoothing as soon as the address is another page's", () => {
+    prefersReducedMotion(false);
+    history.replaceState(null, "", "/en");
+    render(<SmoothScroll />);
+    const { virtualScroll } = (Lenis.mock.calls.at(-1) as unknown as [{ virtualScroll: () => boolean }])[0];
+    vi.advanceTimersByTime(300);
+    expect(virtualScroll()).toBe(true);
+    // A new hash or query is still this page.
+    history.replaceState(null, "", "/en/?x=1#contact");
+    expect(virtualScroll()).toBe(true);
+    history.replaceState(null, "", "/en/services");
+    expect(virtualScroll()).toBe(false);
+    lenis.raf.mockClear();
+    vi.advanceTimersByTime(50);
+    expect(lenis.raf).not.toHaveBeenCalled();
+    history.replaceState(null, "", "/en");
+  });
+
+  test("in a layout, starts smoothing afresh for every page", () => {
+    prefersReducedMotion(false);
+    history.replaceState(null, "", "/en");
+    const { rerender } = render(<SmoothScroll />);
+    history.replaceState(null, "", "/en/services");
+    pathname = "/en/services";
+    rerender(<SmoothScroll />);
+    expect(lenis.destroy).toHaveBeenCalledOnce();
+    expect(Lenis).toHaveBeenCalledTimes(2);
+    const { virtualScroll } = (Lenis.mock.calls.at(-1) as unknown as [{ virtualScroll: () => boolean }])[0];
+    vi.advanceTimersByTime(300);
+    expect(virtualScroll()).toBe(true);
+    pathname = "/en";
+    history.replaceState(null, "", "/en");
+  });
+
+  test("leaves the wheel and touch alone while the page is being placed", () => {
+    prefersReducedMotion(false);
+    render(<SmoothScroll />);
+    const { virtualScroll } = (Lenis.mock.calls.at(-1) as unknown as [{ virtualScroll: () => boolean }])[0];
+    expect(virtualScroll()).toBe(false);
+    vi.advanceTimersByTime(300);
+    expect(virtualScroll()).toBe(true);
+  });
+
   test("smooths scrolling every frame and cleans up", () => {
     prefersReducedMotion(false);
     const { unmount, container } = render(<SmoothScroll duration={1} />);
     expect(container.innerHTML).toBe("");
-    expect(Lenis).toHaveBeenCalledWith({ duration: 1, smoothWheel: true });
+    expect(Lenis).toHaveBeenCalledWith({ duration: 1, smoothWheel: true, virtualScroll: expect.any(Function) });
     vi.advanceTimersByTime(50);
     expect(lenis.raf).toHaveBeenCalled();
     // Programmatic glides go through it too, and stop going through it once it is gone.
@@ -82,10 +139,10 @@ describe("SmoothScroll", () => {
     expect(click("home", { shiftKey: true })).toBe(true);
     expect(click("home", { altKey: true })).toBe(true);
     expect(click("home", { button: 1 })).toBe(true);
-    expect(click("other")).toBe(true);
     expect(click("tab")).toBe(true);
     expect(click("query")).toBe(true);
     expect(click("hash")).toBe(true);
+    expect(click("other")).toBe(true);
     expect(lenis.scrollTo).toHaveBeenCalledOnce();
   });
 
