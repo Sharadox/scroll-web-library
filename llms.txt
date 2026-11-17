@@ -5,6 +5,7 @@
 - /smooth-scroll: <SmoothScroll duration=1.15 anchorOffset=-60 /> — off with prefers-reduced-motion; handles a[href^="#"] clicks
 - /active-section: useActiveSection(ids: readonly string[]) → { active: id at viewport middle, within: 0–1 through it, page: 0–1 page progress }
 - Peer: react. License: Sharadox Open Source License 0.1.0
+- SmoothScroll works in a page or a layout (it starts afresh for every pathname). Each page's smoothing stops the moment the address is another page's (link, back or forward) and a new page stops the previous one's, so a glide or trackpad momentum from the old page never moves the new one; for 300 ms after a page opens, wheel and touch are left to the browser while Next.js places it (0.4.2).
 - SmoothScroll also turns plain clicks on links to the current page (same path, no hash or query, no target, no modifier keys) into a scroll to the top, without reloading — with or without reduced motion.
 - /glide: glideTo(top, { duration? }) — through the running SmoothScroll (Lenis) or window.scrollTo (smooth, or auto with reduced motion); registerGlider is internal to SmoothScroll
 - /scroll-steps: useScrollSteps(sectionRef, count, { duration? = 0.9 }) — while the section is pinned, each wheel gesture (a pause of 180 ms starts a new one) or finger swipe (30 px+) glides exactly one step; step i sits at top + (i + 0.5) / count × (height − innerHeight); past the ends the page scrolls on
