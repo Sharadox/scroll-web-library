@@ -3,7 +3,7 @@
 Scrolling for React websites:
 
 - **Smooth scrolling:** inertial scrolling with Lenis, including in-page anchor links that stop above a fixed header. A link to the page already open (the logo on the home page) glides back to the top instead of reloading. Smoothing turns off for visitors who prefer reduced motion; same-page links still skip the reload.
-- **Glide:** `glideTo(top)` moves the page through the smooth scrolling, so code-driven moves ease like the visitor's own.
+- **Glide:** `glideTo(top)` moves the page through the smooth scrolling, so code-driven moves ease like the visitor's own. `glideIntoView(element)` brings an element into view, clear of the top bar, when it isn't wholly in view (a form's thank-you after sending on a phone).
 - **Scroll steps:** `useScrollSteps(section, count)` gives a tall pinned section that shows steps one after another (a timelapse, a story) one step per scroll gesture: one wheel turn, trackpad swipe or finger swipe. It doesn't take many to get from one step to the next.
 - **Active section:** which section holds the middle of the screen, how far through it you are, and how far down the page. That's what section indicators and progress bars need.
 
@@ -15,13 +15,14 @@ pnpm add @sharadox/scroll-web-library
 
 ## API
 
-| Import             | Export                                                                                                                                                                                                       |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `…/smooth-scroll`  | `<SmoothScroll duration? anchorOffset?>` (renders nothing; default 1.15 s and -60 px; `#top` glides to the top of any page; in a page or a layout, and a glide from one page never carries over to the next) |
-| `…/section-link`   | `<SectionLink href>`: Next.js `Link` for a section: on this page (`#id`) scrolling is left to `SmoothScroll` (`scroll={false}`); on another page (`/en#id`) Next.js scrolls there                            |
-| `…/active-section` | `useActiveSection(ids)` → `{ active, within, page }` (keep `ids` stable, for example a module constant)                                                                                                      |
-| `…/glide`          | `glideTo(top, { duration? })`                                                                                                                                                                                |
-| `…/scroll-steps`   | `useScrollSteps(sectionRef, count, { duration? })` (0.9 s by default)                                                                                                                                        |
+| Import              | Export                                                                                                                                                                                                       |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `…/smooth-scroll`   | `<SmoothScroll duration? anchorOffset?>` (renders nothing; default 1.15 s and -60 px; `#top` glides to the top of any page; in a page or a layout, and a glide from one page never carries over to the next) |
+| `…/section-link`    | `<SectionLink href>`: Next.js `Link` for a section: on this page (`#id`) scrolling is left to `SmoothScroll` (`scroll={false}`); on another page (`/en#id`) Next.js scrolls there                            |
+| `…/active-section`  | `useActiveSection(ids)` → `{ active, within, page }` (keep `ids` stable, for example a module constant)                                                                                                      |
+| `…/glide`           | `glideTo(top, { duration? })`                                                                                                                                                                                |
+| `…/glide-into-view` | `glideIntoView(element, { offset? = 96, duration? })`: glides the element's top to `offset` below the window's top when it isn't wholly in view                                                              |
+| `…/scroll-steps`    | `useScrollSteps(sectionRef, count, { duration? })` (0.9 s by default)                                                                                                                                        |
 
 ## Develop
 
