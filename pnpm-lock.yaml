@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@sharadox/web-library':
-        specifier: ^0.8.0
-        version: 0.8.0
+        specifier: ^0.9.0
+        version: 0.9.0
       lenis:
         specifier: ^1.3.27
         version: 1.3.27(react@19.3.1)
@@ -617,8 +617,8 @@ packages:
       '@vitest/coverage-v8': '>=5'
       vitest: '>=5'
 
-  '@sharadox/web-library@0.8.0':
-    resolution: {integrity: sha512-5lqIUC05HtOmaUlnmZtxHCWyWcbziZqNfI761eCHYv1vZmcZifgATBSBaqgkk77zSHvoapLenQJrFocKWdTOtA==}
+  '@sharadox/web-library@0.9.0':
+    resolution: {integrity: sha512-Da45H5O6aQxPfKt+EWHUYElXqwtg6IHUPRA7iDmKYn7Iat92/2tLhrXmZOYWj8L7xqKkeahkaYlZp3Izd4tgEQ==}
     engines: {node: '>=26'}
 
   '@shikijs/engine-oniguruma@3.23.0':
@@ -2143,7 +2143,7 @@ snapshots:
       - oxc-transform-react
       - vite
 
-  '@sharadox/web-library@0.8.0': {}
+  '@sharadox/web-library@0.9.0': {}
 
   '@shikijs/engine-oniguruma@3.23.0':
     dependencies:
