@@ -4,7 +4,6 @@ import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { registerGlider } from "@sharadox/scroll-web-library/glide";
 import type { SmoothScrollProperties } from "@sharadox/scroll-web-library/smooth-scroll/type";
-import "./index.css";
 
 /** Milliseconds after a page opens while Next.js places it (at the top, an anchor or where it was). */
 const SETTLING = 300;
