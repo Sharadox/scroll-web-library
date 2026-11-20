@@ -2,6 +2,10 @@
 
 What changed in each version of `@sharadox/scroll-web-library`, newest first.
 
+## 0.7.0
+
+SmoothScroll brings the page CSS Lenis needs (html.lenis heights, no browser smoothing while it runs, nothing scrolls while stopped), so sites drop their copies; built with library-build so the stylesheet ships; useScrolledPast; current library versions
+
 ## 0.4.1
 
 SectionLink leaves Next.js scrolling on for sections of other pages ("/en#contact"), so they land on the section
