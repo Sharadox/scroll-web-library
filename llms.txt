@@ -2,6 +2,7 @@
 
 > Smooth scrolling (Lenis) and active-section tracking for React.
 
+- /scrolled-past: useScrolledPast(point: px | (windowHeight) => px) → boolean, kept up to date on scroll and resize (a bar that turns solid, an action that appears below the hero)
 - /smooth-scroll: <SmoothScroll duration=1.15 anchorOffset=-60 /> — off with prefers-reduced-motion; handles a[href^="#"] clicks
 - /active-section: useActiveSection(ids: readonly string[]) → { active: id at viewport middle, within: 0–1 through it, page: 0–1 page progress }
 - Peer: react. License: Sharadox Open Source License 0.1.0
