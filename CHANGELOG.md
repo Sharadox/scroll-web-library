@@ -2,6 +2,10 @@
 
 What changed in each version of `@sharadox/scroll-web-library`, newest first.
 
+## 0.7.1
+
+SmoothScroll no longer imports its page CSS: a global stylesheet imported from a library changed the order Next.js loads a site's styles in (the Sharadox home page moved by 16 pixels in its visual tests). Sites keep those few rules in their own global stylesheet.
+
 ## 0.7.0
 
 SmoothScroll brings the page CSS Lenis needs (html.lenis heights, no browser smoothing while it runs, nothing scrolls while stopped), so sites drop their copies; built with library-build so the stylesheet ships; useScrolledPast; current library versions

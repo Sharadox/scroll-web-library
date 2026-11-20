@@ -3,7 +3,7 @@
 > Smooth scrolling (Lenis) and active-section tracking for React.
 
 - /scrolled-past: useScrolledPast(point: px | (windowHeight) => px) → boolean, kept up to date on scroll and resize (a bar that turns solid, an action that appears below the hero)
-- /smooth-scroll: <SmoothScroll duration=1.15 anchorOffset=-60 /> — off with prefers-reduced-motion; handles a[href^="#"] clicks; brings the page CSS Lenis needs (sites no longer write it)
+- /smooth-scroll: <SmoothScroll duration=1.15 anchorOffset=-60 /> — off with prefers-reduced-motion; handles a[href^="#"] clicks; sites keep the page CSS Lenis needs in their own global stylesheet (a stylesheet imported from a library changes the order Next.js loads the site's styles in)
 - /active-section: useActiveSection(ids: readonly string[]) → { active: id at viewport middle, within: 0–1 through it, page: 0–1 page progress }
 - Peer: react. License: Sharadox Open Source License 0.1.0
 - SmoothScroll works in a page or a layout (it starts afresh for every pathname). Each page's smoothing stops the moment the address is another page's (link, back or forward) and a new page stops the previous one's, so a glide or trackpad momentum from the old page never moves the new one; for 300 ms after a page opens, wheel and touch are left to the browser while Next.js places it (0.4.2).
