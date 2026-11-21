@@ -88,8 +88,11 @@ describe("SmoothScroll", () => {
     lenis.raf.mockClear();
     vi.advanceTimersByTime(500);
     expect(lenis.raf).not.toHaveBeenCalled();
-    // A wheel the smoothing takes wakes it, and it keeps going while the page glides.
+    // A wheel the smoothing takes wakes it: first its clock catches up with now (so the glide doesn't finish at
+    // once after the pause), then it keeps going while the page glides.
     expect(virtualScroll()).toBe(true);
+    expect(lenis.raf).toHaveBeenCalledTimes(1);
+    expect(lenis.raf).toHaveBeenLastCalledWith(performance.now());
     lenis.isScrolling = "smooth";
     vi.advanceTimersByTime(1000);
     expect(lenis.raf.mock.calls.length).toBeGreaterThan(30);

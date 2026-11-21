@@ -51,7 +51,11 @@ export function SmoothScroll({ duration = 1.15, anchorOffset = -60 }: SmoothScro
     };
     const wake = () => {
       grace = GRACE;
-      if (lenis && !frame) frame = requestAnimationFrame(animate);
+      if (!lenis || frame) return;
+      // Lenis moves each frame by the time since its last one: after a rest that's the whole pause, which would
+      // finish the next glide at once. Its clock catches up first (nothing is moving yet), so the glide starts at 0.
+      lenis.raf(performance.now());
+      frame = requestAnimationFrame(animate);
     };
     const lenis = window.matchMedia("(prefers-reduced-motion: reduce)").matches
       ? null
