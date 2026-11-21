@@ -2,6 +2,10 @@
 
 What changed in each version of `@sharadox/scroll-web-library`, newest first.
 
+## 0.7.2
+
+Smooth scrolling only works while the page moves: between scrolls it rests (it asked for a frame every frame, forever, which kept the browser rebuilding the page) and wakes on the next wheel, touch, scroll or glide. Scrolling looks and feels the same.
+
 ## 0.7.1
 
 SmoothScroll no longer imports its page CSS: a global stylesheet imported from a library changed the order Next.js loads a site's styles in (the Sharadox home page moved by 16 pixels in its visual tests). Sites keep those few rules in their own global stylesheet.
