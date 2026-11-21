@@ -1,7 +1,7 @@
 import { cleanup, render } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
-const lenis = { raf: vi.fn(), scrollTo: vi.fn(), destroy: vi.fn() };
+const lenis = { raf: vi.fn(), scrollTo: vi.fn(), destroy: vi.fn(), isScrolling: false as false | "smooth" };
 const Lenis = vi.fn(function () {
   return lenis;
 });
@@ -77,6 +77,36 @@ describe("SmoothScroll", () => {
     expect(virtualScroll()).toBe(false);
     vi.advanceTimersByTime(300);
     expect(virtualScroll()).toBe(true);
+  });
+
+  test("rests while the page sits still, and wakes for a wheel, a scroll or a glide until the page settles", () => {
+    prefersReducedMotion(false);
+    render(<SmoothScroll />);
+    const { virtualScroll } = (Lenis.mock.calls.at(-1) as unknown as [{ virtualScroll: () => boolean }])[0];
+    vi.advanceTimersByTime(1000);
+    // Settled: no frame waits any more.
+    lenis.raf.mockClear();
+    vi.advanceTimersByTime(500);
+    expect(lenis.raf).not.toHaveBeenCalled();
+    // A wheel the smoothing takes wakes it, and it keeps going while the page glides.
+    expect(virtualScroll()).toBe(true);
+    lenis.isScrolling = "smooth";
+    vi.advanceTimersByTime(1000);
+    expect(lenis.raf.mock.calls.length).toBeGreaterThan(30);
+    lenis.isScrolling = false;
+    vi.advanceTimersByTime(1000);
+    lenis.raf.mockClear();
+    vi.advanceTimersByTime(500);
+    expect(lenis.raf).not.toHaveBeenCalled();
+    // A native scroll (a keyboard, the scrollbar) and a glide wake it too.
+    dispatchEvent(new Event("scroll"));
+    vi.advanceTimersByTime(50);
+    expect(lenis.raf).toHaveBeenCalled();
+    vi.advanceTimersByTime(1000);
+    lenis.raf.mockClear();
+    glideTo(400);
+    vi.advanceTimersByTime(50);
+    expect(lenis.raf).toHaveBeenCalled();
   });
 
   test("smooths scrolling every frame and cleans up", () => {

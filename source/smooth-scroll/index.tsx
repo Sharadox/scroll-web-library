@@ -7,6 +7,8 @@ import type { SmoothScrollProperties } from "@sharadox/scroll-web-library/smooth
 
 /** Milliseconds after a page opens while Next.js places it (at the top, an anchor or where it was). */
 const SETTLING = 300;
+/** Frames the smoothing keeps running after it last had something to do, so a glide never stops on its first frame. */
+const GRACE = 10;
 
 /**
  * Stops the smoothing of the page that came before. Next.js may keep that page a moment after the new one appears; its
@@ -24,7 +26,8 @@ const page = (path: string) => path.replace(/(.)\/$/, "$1");
  * jump, and the same-page link still goes to the top without reloading. It works in a page or in a layout. A page's smoothing stops as soon as the
  * address is another page's, and only one page smooths at a time; a new page leaves the wheel and touch alone for a moment while
  * Next.js places it. So a glide still under way from the previous page (a trackpad's momentum, say) can't send the new
- * page to the old page's place.
+ * page to the old page's place. It only works while the page moves: between scrolls it rests, and wakes on the next
+ * wheel, touch, scroll or glide.
  */
 export function SmoothScroll({ duration = 1.15, anchorOffset = -60 }: SmoothScrollProperties) {
   // In a layout, it stays mounted from page to page: each page gets smoothing of its own.
@@ -37,17 +40,39 @@ export function SmoothScroll({ duration = 1.15, anchorOffset = -60 }: SmoothScro
     const path = page(location.pathname);
     const here = () => page(location.pathname) === path;
     const listening = () => here() && performance.now() - opened >= SETTLING;
-    const lenis = window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      ? null
-      : new Lenis({ duration, smoothWheel: true, virtualScroll: listening });
+    // The smoothing works frame by frame only while the page moves; then it rests until the next wheel, touch,
+    // scroll or glide wakes it, so a page that sits still costs nothing.
     let frame = 0;
+    let grace = GRACE;
     const animate = (time: number) => {
       if (here()) lenis!.raf(time);
-      frame = requestAnimationFrame(animate);
+      grace = lenis!.isScrolling ? GRACE : grace - 1;
+      frame = grace > 0 ? requestAnimationFrame(animate) : 0;
     };
-    if (lenis) frame = requestAnimationFrame(animate);
+    const wake = () => {
+      grace = GRACE;
+      if (lenis && !frame) frame = requestAnimationFrame(animate);
+    };
+    const lenis = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? null
+      : new Lenis({
+          duration,
+          smoothWheel: true,
+          // Called for every wheel and touch event: the ones the smoothing takes wake it.
+          virtualScroll: () => {
+            const taken = listening();
+            if (taken) wake();
+            return taken;
+          },
+        });
+    wake();
+    addEventListener("scroll", wake, { passive: true });
+    const scrollTo = (...glide: Parameters<Lenis["scrollTo"]>) => {
+      wake();
+      lenis!.scrollTo(...glide);
+    };
     // glideTo moves the page through it, so programmatic moves ease like the visitor's own.
-    registerGlider(lenis && { scrollTo: (top, options) => lenis.scrollTo(top, options) });
+    registerGlider(lenis && { scrollTo: (top, options) => scrollTo(top, options) });
     const onClick = (event: MouseEvent) => {
       const link = (event.target as HTMLElement).closest<HTMLAnchorElement>("a[href]");
       if (!link) return;
@@ -60,9 +85,9 @@ export function SmoothScroll({ duration = 1.15, anchorOffset = -60 }: SmoothScro
         if (!lenis && !event.defaultPrevented) return;
         event.preventDefault();
         if (anchor === document.documentElement) {
-          if (lenis) lenis.scrollTo(0);
+          if (lenis) scrollTo(0);
           else window.scrollTo({ top: 0, behavior: "auto" });
-        } else if (lenis) lenis.scrollTo(anchor, { offset: anchorOffset });
+        } else if (lenis) scrollTo(anchor, { offset: anchorOffset });
         else anchor.scrollIntoView();
         return;
       }
@@ -75,13 +100,14 @@ export function SmoothScroll({ duration = 1.15, anchorOffset = -60 }: SmoothScro
       const plainClick = event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
       if (samePage && plainClick && !link.target) {
         event.preventDefault();
-        if (lenis) lenis.scrollTo(0);
+        if (lenis) scrollTo(0);
         else window.scrollTo({ top: 0, behavior: "auto" });
       }
     };
     document.addEventListener("click", onClick);
     const stop = () => {
       cancelAnimationFrame(frame);
+      removeEventListener("scroll", wake);
       document.removeEventListener("click", onClick);
       lenis?.destroy();
     };
