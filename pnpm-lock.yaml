@@ -9,30 +9,30 @@ importers:
   .:
     dependencies:
       '@sharadox/web-library':
-        specifier: ^0.10.0
-        version: 0.10.0
+        specifier: ^0.11.1
+        version: 0.11.1
       lenis:
         specifier: ^1.3.27
         version: 1.3.27(react@19.3.1)
     devDependencies:
       '@sharadox/es-lint-configuration-web-library':
-        specifier: ^0.1.2
-        version: 0.1.2(eslint@9.39.5)(typescript@6.0.3)
-      '@sharadox/library-build-web-library':
-        specifier: ^0.2.0
-        version: 0.2.0(typescript@6.0.3)
-      '@sharadox/prettier-configuration-web-library':
-        specifier: ^0.1.1
-        version: 0.1.1
-      '@sharadox/turborepo-configuration-web-library':
         specifier: ^0.1.3
-        version: 0.1.3(turbo@2.11.13)
+        version: 0.1.3(eslint@9.39.5)(typescript@6.0.3)
+      '@sharadox/library-build-web-library':
+        specifier: ^0.2.1
+        version: 0.2.1(typescript@6.0.3)
+      '@sharadox/prettier-configuration-web-library':
+        specifier: ^0.1.2
+        version: 0.1.2
+      '@sharadox/turborepo-configuration-web-library':
+        specifier: ^0.1.4
+        version: 0.1.4(turbo@2.11.13)
       '@sharadox/type-script-configuration-web-library':
-        specifier: ^0.2.2
-        version: 0.2.2(typescript@6.0.3)
+        specifier: ^0.2.3
+        version: 0.2.3(typescript@6.0.3)
       '@sharadox/vitest-configuration-web-library':
-        specifier: ^0.2.0
-        version: 0.2.0(@vitest/coverage-v8@5.1.1)(vite@8.3.8(@types/node@26.6.6)(sass@1.108.2)(yaml@2.9.1))(vitest@5.1.1)
+        specifier: ^0.2.1
+        version: 0.2.1(@vitest/coverage-v8@5.1.1)(vite@8.3.8(@types/node@26.6.6)(sass@1.108.2)(yaml@2.9.1))(vitest@5.1.1)
       '@testing-library/dom':
         specifier: ^10.4.2
         version: 10.4.2
@@ -670,8 +670,8 @@ packages:
   '@rolldown/pluginutils@1.1.1':
     resolution: {integrity: sha512-glFIJDvLNDtJhT9qrMFWLPbvS+skxgt4L0K8Ei2YtnhPysAJnsI7nyxSJxKj4ADeKX0OLjC4ntRkwpLOoS3rwA==}
 
-  '@sharadox/es-lint-configuration-web-library@0.1.2':
-    resolution: {integrity: sha512-pazRevmqX5P3CyIqHN4HSYOdJvT4sEfv+5+eHu7D+a1PGBTSYVyoJtVDdDHvuSWTW736M9vOlqNGK8U0xYnNxg==}
+  '@sharadox/es-lint-configuration-web-library@0.1.3':
+    resolution: {integrity: sha512-ZwUnfURFAJ0j91FiSgQuNOa9JdWE+/a5EcLCAIeGrs2F2eTCOqLfud9qjnX1VKqEFUjpWecgDy6eVAdtul9sjg==}
     engines: {node: '>=26'}
     peerDependencies:
       eslint: '>=9'
@@ -681,39 +681,39 @@ packages:
       eslint-config-next:
         optional: true
 
-  '@sharadox/library-build-web-library@0.2.0':
-    resolution: {integrity: sha512-luGgDSjnohCqfJlfUBl341Kt3Snpsog5f7HJ910pd7mwlFZNTTy1OHyfyFcSJIdA2zbrWs5QVcaKyUOntrPMOQ==}
+  '@sharadox/library-build-web-library@0.2.1':
+    resolution: {integrity: sha512-e4WXdeRUvaXYJUsBCD121NUMBrC6PUc9ucoiNiAsZhITMNmF2ZGzeXtDDjKY2azIpl16qHJSrmN9A5S1/KK8eQ==}
     engines: {node: '>=26'}
     hasBin: true
     peerDependencies:
       typescript: '>=6'
 
-  '@sharadox/prettier-configuration-web-library@0.1.1':
-    resolution: {integrity: sha512-isV5gr/ku2DzfzIC+VlaxtuCBDwoV9ccMec3lvRn7/Gih1E5HW1+tV0YrxDwBH+wjaFiDuAQO6UTZNM5+N4rDw==}
+  '@sharadox/prettier-configuration-web-library@0.1.2':
+    resolution: {integrity: sha512-SFqfnfMqr2KoK5w/KAwYOS4NQGkOYPLzLhY/O/pVNLpzGPC24C/djE/v/0Agh91HGaLQO591DV1QHvwJw07N3w==}
     engines: {node: '>=26'}
 
-  '@sharadox/turborepo-configuration-web-library@0.1.3':
-    resolution: {integrity: sha512-8rQ9TFJN+3er7EA2WDkh7RH8ARjeHO1miePLv3UPcqNqeswdLMMEEIG3Dopngl+ajQv+rOJR+OOCj8AwaZGpFA==}
+  '@sharadox/turborepo-configuration-web-library@0.1.4':
+    resolution: {integrity: sha512-HvLEItkOWwcKSkm4r9k23RLGJ4O9YedyNZxKdoyHQN8s5VeT3kzST8NgzvJSiAAxUS5DnmaqKDfWzykArdB8HA==}
     engines: {node: '>=26'}
     hasBin: true
     peerDependencies:
       turbo: '>=2'
 
-  '@sharadox/type-script-configuration-web-library@0.2.2':
-    resolution: {integrity: sha512-ePylS+004KOXrI+suAVanNMAJH+6oEF24axpprN3inTS3mDPiZVbZkaNPxPfCuXcATK9EXMz1oHiwnpUoZbDdw==}
+  '@sharadox/type-script-configuration-web-library@0.2.3':
+    resolution: {integrity: sha512-CmybB8AZbozgvmBTfChz1TEFwTJ93knF9bgAU2Yjbfqm5ADNsLdRS7IbF8E9cpi4Rr9/asRyQy8Bp1HEtK2Mag==}
     engines: {node: '>=26'}
     peerDependencies:
       typescript: '>=6'
 
-  '@sharadox/vitest-configuration-web-library@0.2.0':
-    resolution: {integrity: sha512-lCfSm1NMOW0LSUs7TVpsLNSbEg9BEgkRGVGyrXkry51rsc7YLO5ERe6kZLFUPMMFXb+qFabP+aUvaATlzY6cMQ==}
+  '@sharadox/vitest-configuration-web-library@0.2.1':
+    resolution: {integrity: sha512-CRUXEVjNjJGYQbzzICL355Aoy29mkmRToMKEBNHCQ+kCGyvoX3Ypnoj6ZvdFxeP3b6mPGomhfuujNInS9RUNNQ==}
     engines: {node: '>=26'}
     peerDependencies:
       '@vitest/coverage-v8': '>=5'
       vitest: '>=5'
 
-  '@sharadox/web-library@0.10.0':
-    resolution: {integrity: sha512-AJ73a6ULYqAOwUVpaYOPQbvwObCUD0O9NRzP5ASKj7jiGbcs+H7iDZ6bHYdlaxCSo1NTWhne+0hyAvg8JfXMZg==}
+  '@sharadox/web-library@0.11.1':
+    resolution: {integrity: sha512-8DZLPOh45wG/e0sdfR+dKEX33pOZzV5bNOfPS5MwQTu41mj+NyE4OWqO2XElacMUSA1EBhGF4Gpt5XVz/NWsaQ==}
     engines: {node: '>=26'}
 
   '@shikijs/engine-oniguruma@3.23.0':
@@ -2292,7 +2292,7 @@ snapshots:
 
   '@rolldown/pluginutils@1.1.1': {}
 
-  '@sharadox/es-lint-configuration-web-library@0.1.2(eslint@9.39.5)(typescript@6.0.3)':
+  '@sharadox/es-lint-configuration-web-library@0.1.3(eslint@9.39.5)(typescript@6.0.3)':
     dependencies:
       '@eslint/js': 9.39.5
       eslint: 9.39.5
@@ -2304,22 +2304,22 @@ snapshots:
       - '@typescript/native'
       - supports-color
 
-  '@sharadox/library-build-web-library@0.2.0(typescript@6.0.3)':
+  '@sharadox/library-build-web-library@0.2.1(typescript@6.0.3)':
     dependencies:
       sass: 1.108.2
       typescript: 6.0.3
 
-  '@sharadox/prettier-configuration-web-library@0.1.1': {}
+  '@sharadox/prettier-configuration-web-library@0.1.2': {}
 
-  '@sharadox/turborepo-configuration-web-library@0.1.3(turbo@2.11.13)':
+  '@sharadox/turborepo-configuration-web-library@0.1.4(turbo@2.11.13)':
     dependencies:
       turbo: 2.11.13
 
-  '@sharadox/type-script-configuration-web-library@0.2.2(typescript@6.0.3)':
+  '@sharadox/type-script-configuration-web-library@0.2.3(typescript@6.0.3)':
     dependencies:
       typescript: 6.0.3
 
-  '@sharadox/vitest-configuration-web-library@0.2.0(@vitest/coverage-v8@5.1.1)(vite@8.3.8(@types/node@26.6.6)(sass@1.108.2)(yaml@2.9.1))(vitest@5.1.1)':
+  '@sharadox/vitest-configuration-web-library@0.2.1(@vitest/coverage-v8@5.1.1)(vite@8.3.8(@types/node@26.6.6)(sass@1.108.2)(yaml@2.9.1))(vitest@5.1.1)':
     dependencies:
       '@vitejs/plugin-react': 6.3.0(vite@8.3.8(@types/node@26.6.6)(sass@1.108.2)(yaml@2.9.1))
       '@vitest/coverage-v8': 5.1.1(vitest@5.1.1)
@@ -2330,7 +2330,7 @@ snapshots:
       - oxc-transform-react
       - vite
 
-  '@sharadox/web-library@0.10.0': {}
+  '@sharadox/web-library@0.11.1': {}
 
   '@shikijs/engine-oniguruma@3.23.0':
     dependencies:

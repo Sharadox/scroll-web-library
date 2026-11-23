@@ -2,6 +2,10 @@
 
 What changed in each version of `@sharadox/scroll-web-library`, newest first.
 
+## 0.7.3
+
+Workflows from git-hub-action-library v0.2.2: npm Trusted Publishing only
+
 ## 0.7.2
 
 Smooth scrolling only works while the page moves: between scrolls it rests (it asked for a frame every frame, forever, which kept the browser rebuilding the page) and wakes on the next wheel, touch, scroll or glide, its clock caught up first so the first glide after a rest is as smooth as any. Scrolling looks and feels the same.
