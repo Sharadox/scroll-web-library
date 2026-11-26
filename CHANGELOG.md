@@ -2,6 +2,10 @@
 
 What changed in each version of `@sharadox/scroll-web-library`, newest first.
 
+## 0.7.4
+
+Boxes that scroll on their own (long lists, pop-ups) scroll under the wheel instead of the page (Lenis allowNestedScroll).
+
 ## 0.7.3
 
 Workflows from git-hub-action-library v0.2.2: npm Trusted Publishing only

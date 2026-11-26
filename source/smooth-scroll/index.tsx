@@ -62,6 +62,8 @@ export function SmoothScroll({ duration = 1.15, anchorOffset = -60 }: SmoothScro
       : new Lenis({
           duration,
           smoothWheel: true,
+          // A box that scrolls on its own (a long list, a pop-up) scrolls under the wheel, not the page.
+          allowNestedScroll: true,
           // Called for every wheel and touch event: the ones the smoothing takes wake it.
           virtualScroll: () => {
             const taken = listening();
