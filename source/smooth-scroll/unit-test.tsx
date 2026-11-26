@@ -24,6 +24,12 @@ afterEach(() => {
 });
 
 describe("SmoothScroll", () => {
+  test("a box that scrolls on its own (a list, a pop-up) takes the wheel over it, not the page", () => {
+    prefersReducedMotion(false);
+    render(<SmoothScroll />);
+    expect(Lenis).toHaveBeenLastCalledWith(expect.objectContaining({ allowNestedScroll: true }));
+  });
+
   test("a new page stops the previous page's smoothing at once, and keeps its own when the old one leaves", () => {
     prefersReducedMotion(false);
     const previous = render(<SmoothScroll />);
@@ -116,7 +122,12 @@ describe("SmoothScroll", () => {
     prefersReducedMotion(false);
     const { unmount, container } = render(<SmoothScroll duration={1} />);
     expect(container.innerHTML).toBe("");
-    expect(Lenis).toHaveBeenCalledWith({ duration: 1, smoothWheel: true, virtualScroll: expect.any(Function) });
+    expect(Lenis).toHaveBeenCalledWith({
+      duration: 1,
+      smoothWheel: true,
+      allowNestedScroll: true,
+      virtualScroll: expect.any(Function),
+    });
     vi.advanceTimersByTime(50);
     expect(lenis.raf).toHaveBeenCalled();
     // Programmatic glides go through it too, and stop going through it once it is gone.
